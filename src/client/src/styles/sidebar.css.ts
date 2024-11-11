@@ -17,4 +17,16 @@ export const sidebar = style({
     alignItems: 'center',
     
     padding: '1% 0 0 0',
-})
+    gap: '10%',
+});
+
+export const sidebarItem = style({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+    margin: 0,
+    gap: '1em',
+});

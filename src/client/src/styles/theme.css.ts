@@ -1,9 +1,16 @@
-import { createTheme } from '@vanilla-extract/css'
+import { createTheme, globalStyle } from '@vanilla-extract/css'
 
 export const [themeClass, theme] = createTheme({
   color: {
     primary: '#11E091',
     secondary: '#03dac6',
+    
+    green1: '#11E091',
+    green2: '#1ed18c',
+    green3: '#25956a',
+    green4: '#257556',
+    
+    white: '#fefefe',
     background: '#181818',
     text: '#000000',
   },
@@ -16,5 +23,8 @@ export const [themeClass, theme] = createTheme({
     fontFamily: 'Times New Roman',
     // fontFamily: 'Tahoma',
     xl: '1.3em',
+    md: '0.8em',
+    sm: '0.5em',
   },
 });
+
