@@ -6,7 +6,7 @@ class Config:
     client_bind: str = "0.0.0.0"
     client_port: str = "8791"
     client_name: str = "byod--client"
-    client_dir:  str = "src/webclient"
+    client_dir:  str = "src/client"
 
     server_bind: str = "0.0.0.0"
     server_port: str = "4971"
