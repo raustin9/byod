@@ -1,5 +1,8 @@
 import subprocess
 import argparse
+from pathlib import Path
+import venv
+import os
 
 # Configuration information and API
 class Config:
@@ -42,6 +45,23 @@ class Config:
         )
 
         return parser
+
+    @classmethod
+    def source(cls, script_path):
+        # Use Bash to source the script and print the environment
+        command = f"source {script_path} && env"
+        proc = subprocess.Popen(
+            command, shell=True, executable="/bin/bash", stdout=subprocess.PIPE
+        )
+        env_output, _ = proc.communicate()
+
+        # Parse the environment variables
+        env = {}
+        for line in env_output.decode().splitlines():
+            key, _, value = line.partition("=")
+            env[key] = value
+
+        return env
 
 class TmuxSession:
     name: str = ''
@@ -119,12 +139,44 @@ class Server:
         cls.name = name
     
     @classmethod
-    def setup_env(cls):
-        print('Setting up server environment')
-        command = f'cd {Config.client_dir}'
+    def run(cls):
+        print(f'Running server on port {cls.port}')
+        cls.initialize_env()
+        Tmux.new_session(Config.server_name)
+        
+        cls.start()
 
-        # Tmux.send_command(Config.server_name, command)
-        # Tmux.send_command(Config.server_name, f'pip install -r {Config.server_dir}/requirements.txt')
+    @classmethod
+    def initialize_env(cls):
+        path = Path('src/server/venv')
+        if path.exists():
+            print('Virtual Env already exists. Aborting.')
+            return
+        print('Initializing server environment')
+        
+        # Venv
+        venv_dir = f'{Config.server_dir}/venv'
+        venv.create(venv_dir, with_pip=True)
+        if os.name == "nt":  # Windows
+            activate_script = os.path.join(venv_dir, "Scripts", "activate_this.py")
+        else:  # Unix or MacOS
+            activate_script = os.path.join(venv_dir, "bin", "activate")
+        Config.source(activate_script)
+
+        pip_executable = os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip.exe")
+        subprocess.run([pip_executable, "install", '-r', f'{Config.server_dir}/requirements.txt'])
+
+        # Install deps
+        # command = ['python', '-m', 'pip', 'install', '-r', f'{Config.server_dir}/requirements.txt']
+        # subprocess.run(command)
+
+    @classmethod
+    def start(cls):
+        print('Starting server...')
+        Tmux.send_command(Config.server_name, f'BYOD_SERVER_PORT={Config.server_port}')
+        Tmux.send_command(Config.server_name, f'BYOD_SERVER_BIND={Config.server_bind}')
+        Tmux.send_command(Config.server_name, f'cd src/server')
+        Tmux.send_command(Config.server_name, f'python -m server')
 
 
 if __name__ == "__main__":

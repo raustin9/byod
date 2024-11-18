@@ -1,5 +1,7 @@
 venv/*
 !venv/.gitkeep
+src/server/venv/*
+!src/server/venv/.gitkeep
 
 data
 
