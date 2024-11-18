@@ -21,12 +21,24 @@ class Config:
             action='store_true',
             help='run the web client',
         )
-
+        
+        # parser.add_argument(
+        #     '--port',
+        #     type=str,
+        #     default=None,
+        #     help='specify the port you wish to run this on'
+        # )
+        
         parser.add_argument(
-            '--port',
-            type=str,
-            default=None,
-            help='specify the port you wish to run this on'
+            '--server-env',
+            action='store_true',
+            help='setup the environment for the server',
+        )
+        
+        parser.add_argument(
+            '--run-server',
+            action='store_true',
+            help='run the backend service',
         )
 
         return parser
@@ -97,6 +109,23 @@ class Client:
         print('Starting client...')
         Tmux.send_command(Config.client_name, f'gatsby develop --host {Config.client_bind} --port {Config.client_port}')
 
+class Server:
+    port: str = Config.server_port
+    name: str = Config.server_name
+
+    @classmethod
+    def __new__(cls, port:str=Config.client_port, name:str=Config.client_name):
+        cls.port = port
+        cls.name = name
+    
+    @classmethod
+    def setup_env(cls):
+        print('Setting up server environment')
+        command = f'cd {Config.client_dir}'
+
+        # Tmux.send_command(Config.server_name, command)
+        # Tmux.send_command(Config.server_name, f'pip install -r {Config.server_dir}/requirements.txt')
+
 
 if __name__ == "__main__":
     parser = Config.create_parser()
@@ -104,6 +133,8 @@ if __name__ == "__main__":
 
     if args.run_client:
         Client.run()
+    elif args.run_server:
+        Server.run()
     
 
     pass

@@ -1,4 +1,8 @@
-src/client/node_modules/
-src/client/.cache/
-src/client/public
-src/client/src/gatsby-types.d.ts
+venv/*
+!venv/.gitkeep
+
+data
+
+preprocessing/venv/*
+!preprocessing/venv/.gitkeep
+preprocessing/tmp/*
