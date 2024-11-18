@@ -11,7 +11,9 @@ export const [themeClass, theme] = createTheme({
     green4: '#257556',
     
     white: '#fefefe',
-    background: '#181818',
+    // background: '#181818',
+    // background: '#26303e',
+    background: '#13171c',
     text: '#000000',
   },
   spacing: {

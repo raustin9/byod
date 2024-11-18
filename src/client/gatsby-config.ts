@@ -12,7 +12,8 @@ const config: GatsbyConfig = {
   plugins: ["gatsby-plugin-vanilla-extract", "gatsby-plugin-sitemap", {
     resolve: 'gatsby-plugin-manifest',
     options: {
-      "icon": "src/images/icon.png"
+      "icon": "src/images/icon.png",
+      "server_host": process.env.BYOD_SERVER_HOST,
     }
   }]
 };
