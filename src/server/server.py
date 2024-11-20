@@ -30,7 +30,7 @@ async def index(
     request: auto.fastapi.Request
 ):
     return auto.fastapi.Response(
-        content='Hello World',
+        content='Hello World\n',
         status_code=200,
         media_type='text/plain'
     )
